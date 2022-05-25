@@ -68,12 +68,12 @@ ASCII:
 #define IS_ALPHA(c) (((c) >= 'a' && (c) <= 'z') || ((c) >= 'A' && (c) <= 'Z'))
 #endif
 
-#ifndef IS_NUM
-#define IS_NUM(c)   ((c) >= '0' && (c) <= '9')
+#ifndef IS_NUM_HV
+#define IS_NUM_HV(c)   ((c) >= '0' && (c) <= '9')
 #endif
 
 #ifndef IS_ALPHANUM
-#define IS_ALPHANUM(c) (IS_ALPHA(c) || IS_NUM(c))
+#define IS_ALPHANUM(c) (IS_ALPHA(c) || IS_NUM_HV(c))
 #endif
 
 #ifndef IS_CNTRL
@@ -85,7 +85,7 @@ ASCII:
 #endif
 
 #ifndef IS_HEX
-#define IS_HEX(c) (IS_NUM(c) || ((c) >= 'a' && (c) <= 'f') || ((c) >= 'A' && (c) <= 'F'))
+#define IS_HEX(c) (IS_NUM_HV(c) || ((c) >= 'a' && (c) <= 'f') || ((c) >= 'A' && (c) <= 'F'))
 #endif
 
 #ifndef IS_LOWER

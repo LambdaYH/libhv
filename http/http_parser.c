@@ -415,9 +415,9 @@ enum http_host_state
 #define LF                  '\n'
 #define LOWER(c)            (unsigned char)(c | 0x20)
 #define IS_ALPHA(c)         (LOWER(c) >= 'a' && LOWER(c) <= 'z')
-#define IS_NUM(c)           ((c) >= '0' && (c) <= '9')
-#define IS_ALPHANUM(c)      (IS_ALPHA(c) || IS_NUM(c))
-#define IS_HEX(c)           (IS_NUM(c) || (LOWER(c) >= 'a' && LOWER(c) <= 'f'))
+#define IS_NUM_HV(c)           ((c) >= '0' && (c) <= '9')
+#define IS_ALPHANUM(c)      (IS_ALPHA(c) || IS_NUM_HV(c))
+#define IS_HEX(c)           (IS_NUM_HV(c) || (LOWER(c) >= 'a' && LOWER(c) <= 'f'))
 #define IS_MARK(c)          ((c) == '-' || (c) == '_' || (c) == '.' || \
   (c) == '!' || (c) == '~' || (c) == '*' || (c) == '\'' || (c) == '(' || \
   (c) == ')')
@@ -799,7 +799,7 @@ reexecute:
         break;
 
       case s_res_http_major:
-        if (UNLIKELY(!IS_NUM(ch))) {
+        if (UNLIKELY(!IS_NUM_HV(ch))) {
           SET_ERRNO(HPE_INVALID_VERSION);
           goto error;
         }
@@ -820,7 +820,7 @@ reexecute:
       }
 
       case s_res_http_minor:
-        if (UNLIKELY(!IS_NUM(ch))) {
+        if (UNLIKELY(!IS_NUM_HV(ch))) {
           SET_ERRNO(HPE_INVALID_VERSION);
           goto error;
         }
@@ -842,7 +842,7 @@ reexecute:
 
       case s_res_first_status_code:
       {
-        if (!IS_NUM(ch)) {
+        if (!IS_NUM_HV(ch)) {
           if (ch == ' ') {
             break;
           }
@@ -857,7 +857,7 @@ reexecute:
 
       case s_res_status_code:
       {
-        if (!IS_NUM(ch)) {
+        if (!IS_NUM_HV(ch)) {
           switch (ch) {
             case ' ':
               UPDATE_STATE(s_res_status_start);
@@ -1136,7 +1136,7 @@ reexecute:
         break;
 
       case s_req_http_major:
-        if (UNLIKELY(!IS_NUM(ch))) {
+        if (UNLIKELY(!IS_NUM_HV(ch))) {
           SET_ERRNO(HPE_INVALID_VERSION);
           goto error;
         }
@@ -1157,7 +1157,7 @@ reexecute:
       }
 
       case s_req_http_minor:
-        if (UNLIKELY(!IS_NUM(ch))) {
+        if (UNLIKELY(!IS_NUM_HV(ch))) {
           SET_ERRNO(HPE_INVALID_VERSION);
           goto error;
         }
@@ -1421,7 +1421,7 @@ reexecute:
             break;
 
           case h_content_length:
-            if (UNLIKELY(!IS_NUM(ch))) {
+            if (UNLIKELY(!IS_NUM_HV(ch))) {
               SET_ERRNO(HPE_INVALID_CONTENT_LENGTH);
               goto error;
             }
@@ -1534,7 +1534,7 @@ reexecute:
                 break;
               }
 
-              if (UNLIKELY(!IS_NUM(ch))) {
+              if (UNLIKELY(!IS_NUM_HV(ch))) {
                 SET_ERRNO(HPE_INVALID_CONTENT_LENGTH);
                 parser->header_state = h_state;
                 goto error;
@@ -2225,7 +2225,7 @@ http_parse_host_char(enum http_host_state s, const char ch) {
 
     case s_http_host_port:
     case s_http_host_port_start:
-      if (IS_NUM(ch)) {
+      if (IS_NUM_HV(ch)) {
         return s_http_host_port;
       }
 

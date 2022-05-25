@@ -5,6 +5,7 @@
  * @demo examples/websocket_server_test.cpp
  */
 
+#include "HttpMessage.h"
 #include "HttpServer.h"
 #include "WebSocketChannel.h"
 
@@ -15,7 +16,7 @@
 namespace hv {
 
 struct WebSocketService {
-    std::function<void(const WebSocketChannelPtr&, const std::string&)> onopen;
+    std::function<void(const WebSocketChannelPtr&, const HttpRequestPtr&)> onopen;
     std::function<void(const WebSocketChannelPtr&, const std::string&)> onmessage;
     std::function<void(const WebSocketChannelPtr&)>                     onclose;
     int ping_interval;
