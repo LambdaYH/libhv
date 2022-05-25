@@ -5,7 +5,6 @@
  * @demo examples/websocket_server_test.cpp
  */
 
-#include "HttpMessage.h"
 #include "HttpServer.h"
 #include "WebSocketChannel.h"
 
